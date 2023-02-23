@@ -29,11 +29,11 @@ export const getChatObject = () => {
       characters: [
         {
           name: "questioner",
-          avatar:
-            "https://static.cleword.cn/uploads/e9937b29/7lF_laun5RonFfosfZH6K.png",
+          avatar: "https://res.pandateacher.com/7KJKIMIE1677146652086.png",
         },
         {
           name: "AI",
+          direction: "right",
           avatar: "https://res.pandateacher.com/WDNS259R1677122357140.png",
         },
       ],
