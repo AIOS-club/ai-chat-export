@@ -1,0 +1,32 @@
+{
+  "name": "ai-chat-export",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "author": "lixin@forchange.tech",
+  "description": "export ai-chat page as yaml",
+  "icons": {
+    "16": "/assets/icon.png",
+    "48": "/assets/icon.png",
+    "96": "/assets/icon.png",
+    "128": "/assets/icon.png"
+  },
+  "permissions": [
+    "activeTab"
+  ],
+  "action":{
+    "default_title": "ai-chat-2-yaml"
+  },
+  "host_permissions": [
+   ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["/contentScript/index.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": ["style.css"],
+    "matches": ["<all_urls>"]
+  }]
+}
