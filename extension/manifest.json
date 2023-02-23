@@ -20,7 +20,7 @@
    ],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["https://chat.forchange.cn/*", "https://chat.openai.com/chat/*", "https://aigcfun.com/*"],
       "js": ["/contentScript/index.js"],
       "run_at": "document_end"
     }
@@ -28,5 +28,8 @@
   "web_accessible_resources": [{
     "resources": ["style.css"],
     "matches": ["<all_urls>"]
-  }]
+  }],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'" 
+  }
 }

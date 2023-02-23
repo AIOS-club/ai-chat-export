@@ -6,11 +6,13 @@ const outputDir = 'extension'
 
 const origin = {
   manifest: r('src/manifest.json'),
-  assets: r('src/assets')
+  assets: r('src/assets'),
+
 }
 const target = {
   manifest: r(`${outputDir}/manifest.json`),
-  assets: r(`${outputDir}/assets`)
+  assets: r(`${outputDir}/assets`),
+
 }
 const copyManifest = () => {
   fs.copy(origin.manifest, target.manifest)
@@ -28,8 +30,10 @@ const copyAssets = () => {
   fs.copy(origin.assets, target.assets)
 }
 
+
 copyManifest()
 // copyIndexHtml()
 copyAssets()
+
 
 
