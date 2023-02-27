@@ -22,6 +22,8 @@ export const getChatObject = () => {
   const elements = document.querySelectorAll("[class*='min-h-[20px]']");
   if (elements.length <= 0) return;
 
+  const questionnerAvatar = getQuestionerAvatarUrl();
+
   const defaultJson = {
     $schema: "Dialog",
     Dialog: {
@@ -29,7 +31,9 @@ export const getChatObject = () => {
       characters: [
         {
           name: "questioner",
-          avatar: "https://res.pandateacher.com/7KJKIMIE1677146652086.png",
+          avatar:
+            questionnerAvatar ||
+            "https://res.pandateacher.com/1O2BGDK91671292227563.jpg",
         },
         {
           name: "AI",
@@ -41,7 +45,7 @@ export const getChatObject = () => {
     },
   };
 
-  const contents = [];
+  let contents = [];
 
   elements.forEach((ele) => {
     const firstChild = ele.firstChild;
@@ -83,6 +87,20 @@ export const getChatObject = () => {
     contents.push(contentObj);
   });
 
+  const endContents = [{ CourseFinished: null }, { End: null }];
+  contents = [...contents, ...endContents];
   defaultJson.Dialog.contents = contents;
   return defaultJson;
+};
+
+export const getQuestionerAvatarUrl = () => {
+  let avatarUrl = Array.from(
+    document.querySelectorAll("[class*='w-[30px]']")[0]?.querySelectorAll("img")
+  ).find((item) => item.currentSrc.startsWith("https"))?.currentSrc;
+
+  if (/\?url=/.test(avatarUrl)) {
+    const url = avatarUrl.split("url=")[1];
+    avatarUrl && (avatarUrl = decodeURIComponent(url));
+  }
+  return avatarUrl;
 };

@@ -1,6 +1,6 @@
 {
   "name": "ai-chat-export",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "manifest_version": 3,
   "author": "lixin@forchange.tech",
   "description": "export ai-chat page as yaml",
