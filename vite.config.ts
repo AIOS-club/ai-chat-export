@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
+import hotReloadContent from "./script/hot-reload/content";
+import { isDev, outputDir } from "./const";
 
 export const resolvePath = (...args: string[]) =>
   path.resolve(__dirname, ".", ...args);
@@ -19,11 +21,11 @@ export const commonConfig = {
 export default defineConfig({
   ...commonConfig,
   build: {
-    watch: null,
+    watch: isDev ? {} : null,
     cssCodeSplit: false,
     emptyOutDir: false,
     sourcemap: false,
-    outDir: resolvePath("extension"),
+    outDir: resolvePath(outputDir),
     rollupOptions: {
       input: {
         contentScript: resolvePath("src/contentScript/index.ts"),
@@ -36,4 +38,5 @@ export default defineConfig({
       },
     },
   },
+  plugins: [...commonConfig.plugins, hotReloadContent()],
 });
