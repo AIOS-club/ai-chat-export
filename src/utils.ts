@@ -41,7 +41,7 @@ export const getChatObject = () => {
     },
   };
 
-  const contents = [];
+  let contents = [];
 
   elements.forEach((ele) => {
     const firstChild = ele.firstChild;
@@ -83,6 +83,8 @@ export const getChatObject = () => {
     contents.push(contentObj);
   });
 
+  const endContents = [{ CourseFinished: null }, { End: null }];
+  contents = [...contents, ...endContents];
   defaultJson.Dialog.contents = contents;
   return defaultJson;
 };
