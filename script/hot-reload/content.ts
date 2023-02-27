@@ -8,10 +8,31 @@ const hotReloadContent = (): Plugin => {
   const connectWs = () => {
     try {
       if (wsClient === null) {
-        wsClient = new WebSocket(`ws://127.0.0.1:${contentUpdatePort}/`);
+        wsClient = new WebSocket({ port:contentUpdatePort});
         wsClient.onopen = () => {
           isReady = true;
         };
+        wsClient.on('connection', function connection(ws) {
+          // 启动心跳监听，便于重连
+          ws.send('heartbeatMonitor')
+          const interval = setInterval(() => {
+            ws.send('heartbeat')
+          }, 3000);
+    
+          ws.on('message', (message) => {
+            const info = `${message}`
+            // 监听contentScript代码变化，复用一个ws连接
+            if (info === 'UPDATE_CONTENT_SCRIPT') {
+              wsClient.clients.forEach((ws) => {
+                ws.send('UPDATE_CONTENT_SCRIPT')
+              })
+            }
+          })
+    
+          ws.on('close', () => {
+            clearInterval(interval);
+          })
+        })
       }
     } catch (e) {
       setTimeout(connectWs, 1000);
