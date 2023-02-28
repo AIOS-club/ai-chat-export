@@ -2,20 +2,24 @@ const fs = require('fs-extra')
 const path = require('path')
 const { resolve } = path
 const r = (rootPath) => resolve(__dirname, '..', rootPath)
-const outputDir = 'extension'
+const chokidar = require('chokidar')
+
+const isDev = process.env.ENV === "development";
+
+const outputDir = isDev ? "local" : "extension";
+
 
 const origin = {
   manifest: r('src/manifest.json'),
   assets: r('src/assets'),
-
 }
 const target = {
   manifest: r(`${outputDir}/manifest.json`),
   assets: r(`${outputDir}/assets`),
-
 }
 const copyManifest = () => {
   fs.copy(origin.manifest, target.manifest)
+  console.log('manifest复制')
 }
 const copyIndexHtml = async () => {
   for (const view of ['popup']) {
@@ -35,5 +39,8 @@ copyManifest()
 // copyIndexHtml()
 copyAssets()
 
-
-
+if (isDev) {
+  chokidar.watch([origin.manifest]).on('change', () => {
+    copyManifest()
+  })
+}
