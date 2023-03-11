@@ -1,18 +1,33 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { exportYaml } from "../utils";
+import { exportJson } from "../exportJson";
 
 export default defineComponent({
   setup() {
+    enum IExportType {
+      YAML = "YAML",
+      PNG = "PNG",
+      SVG = "SVG",
+      JSON = "JSON",
+    }
     const tipShow = ref(false);
     const isMenuShow = ref(false);
 
-    const handleExportClick = () => {
+    const handleExportClick = (type: IExportType) => {
       if (tipShow.value) return;
       tipShow.value = true;
+      let isSuccess = true;
 
-      const text = exportYaml();
-      if (!text) {
+      switch (type) {
+        case IExportType.YAML:
+          isSuccess = !!exportYaml();
+          break;
+        case IExportType.JSON:
+          isSuccess = !!exportJson();
+      }
+
+      if (!isSuccess) {
         window.alert("暂无对话可导出");
       }
       setTimeout(() => {
@@ -31,6 +46,7 @@ export default defineComponent({
     return {
       tipShow,
       isMenuShow,
+      IExportType,
       handleExportClick,
       handleMouseEnter,
       handleMouseLeave,
@@ -39,17 +55,8 @@ export default defineComponent({
 });
 </script>
 <template>
-  <div
-    class="ai-chat-export-btn-wrap"
-    :class="{ 'ai-chat-export-disabled': tipShow }"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-  >
-    <div
-      class="ai-chat-export-btn"
-      :class="{ 'ai-chat-export-btn-hover': isMenuShow }"
-      @click.stop="handleExportClick"
-    >
+  <div class="ai-chat-export-btn-wrap" :class="{ 'ai-chat-export-disabled': tipShow }" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+    <div class="ai-chat-export-btn" :class="{ 'ai-chat-export-btn-hover': isMenuShow }">
       <svg
         t="1677574419519"
         class="export-btn-icon"
@@ -74,9 +81,9 @@ export default defineComponent({
     </div>
     <transition name="animated">
       <div v-show="isMenuShow" class="export-btn-list">
-        <div class="export-btn-item yaml">导出 yaml</div>
-        <div class="export-btn-item png">导出 png</div>
-        <div class="export-btn-item csv">导出 csv</div>
+        <div class="export-btn-item yaml" @click.stop="handleExportClick(IExportType.YAML)">另存为 YAML</div>
+        <div class="export-btn-item json" @click.stop="handleExportClick(IExportType.JSON)">另存为 JSON</div>
+        <!-- <div class="export-btn-item csv">导出 csv</div> -->
       </div>
     </transition>
   </div>
@@ -123,7 +130,7 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 96px;
+  width: 110px;
   height: 32px;
   border-radius: 16px;
   color: #fff;
@@ -142,9 +149,9 @@ export default defineComponent({
 .animated-enter-active .yaml {
   animation: show-yaml 240ms ease-in-out forwards;
 }
-.animated-enter-active .png {
+.animated-enter-active .json {
   opacity: 0;
-  animation: show-png 300ms ease-in-out forwards;
+  animation: show-json 300ms ease-in-out forwards;
   animation-delay: 0.12s !important;
 }
 .animated-enter-active .csv {
@@ -160,8 +167,8 @@ export default defineComponent({
   animation: show-yaml 200ms ease-in-out forwards alternate-reverse;
   animation-delay: 60ms !important;
 }
-.animated-leave-active .png {
-  animation: show-png 200ms ease-in-out forwards alternate-reverse;
+.animated-leave-active .json {
+  animation: show-json 200ms ease-in-out forwards alternate-reverse;
   animation-delay: 30ms !important;
 }
 .animated-leave-active .csv {
@@ -178,7 +185,7 @@ export default defineComponent({
     transform: translateY(0);
   }
 }
-@keyframes show-png {
+@keyframes show-json {
   0% {
     opacity: 0;
     transform: translateY(-38px);
