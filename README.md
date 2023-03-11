@@ -28,7 +28,7 @@ pnpm build
 - [ ] [支持导出为 png 图片](https://github.com/AIOS-club/ai-chat-export/issues/2)
 - [ ] [支持导出为csv文件](https://github.com/AIOS-club/ai-chat-export/issues/1)
 - [ ] [支持将导出的文件上传到服务端，并生成一个 CDN 下载地址](https://github.com/AIOS-club/ai-chat-export/issues/4)
-- [ ] 增加开发调试，添加代码热更新
+- [X] 增加开发调试，添加代码热更新
 
 ## License
 [MIT](./LICENSE)

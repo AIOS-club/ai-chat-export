@@ -31,13 +31,11 @@ export const getChatObject = () => {
       characters: [
         {
           name: "questioner",
-          avatar:
-            questionnerAvatar ||
-            "https://res.pandateacher.com/1O2BGDK91671292227563.jpg",
+          direction: "right",
+          avatar: questionnerAvatar || "https://res.pandateacher.com/1O2BGDK91671292227563.jpg",
         },
         {
           name: "AI",
-          direction: "right",
           avatar: "https://res.pandateacher.com/WDNS259R1677122357140.png",
         },
       ],
@@ -48,7 +46,11 @@ export const getChatObject = () => {
   let contents = [];
 
   elements.forEach((ele) => {
-    const firstChild = ele.firstChild;
+    let firstChild = ele;
+    // 处理官方页面和aigcfun页面结构不同的情况
+    if (window.location.host == "chat.openai.com") {
+      firstChild = ele.firstChild as HTMLElement;
+    }
     if (!firstChild) return;
 
     let contentObj = {
@@ -94,9 +96,9 @@ export const getChatObject = () => {
 };
 
 export const getQuestionerAvatarUrl = () => {
-  let avatarUrl = Array.from(
-    document.querySelectorAll("[class*='w-[30px]']")[0]?.querySelectorAll("img")
-  ).find((item) => item.currentSrc.startsWith("https"))?.currentSrc;
+  let avatarUrl = Array.from(document.querySelectorAll("[class*='w-[30px]']")[0]?.querySelectorAll("img")).find((item) =>
+    item.currentSrc.startsWith("https")
+  )?.currentSrc;
 
   if (/\?url=/.test(avatarUrl)) {
     const url = avatarUrl.split("url=")[1];
